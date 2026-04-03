@@ -1,0 +1,7 @@
+{
+  "name": "Trading Tools",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
