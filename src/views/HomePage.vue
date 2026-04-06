@@ -5,9 +5,9 @@
     <h2>Active Accounts</h2>
   </ion-text>
 
-  <ion-list v-if="!loading && accounts.length">
+  <ion-list v-if="!loading && activeAccounts.length">
     <account-item
-        v-for="account in accounts"
+        v-for="account in activeAccounts"
         :key="account.id"
         :account="account"
         :show_active="false"
@@ -47,9 +47,9 @@ import {useAccountsStore} from "@/stores/accounts.store";
 import {onMounted} from "vue";
 
 const store = useAccountsStore();
-const { accounts, loading, error } = storeToRefs(store);
+const { activeAccounts, loading, error } = storeToRefs(store);
 
-const fetchAccounts = () => store.fetchAccounts();
+const fetchAccounts = () => store.fetchAccounts(true);
 
 onMounted(async () => {
   await fetchAccounts();
