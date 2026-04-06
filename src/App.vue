@@ -1,5 +1,6 @@
 <template>
   <ion-app>
+
     <ion-split-pane content-id="main-content" when="lg">
       <ion-menu side="start" menu-id="main-menu" content-id="main-content">
         <ion-header>
@@ -15,9 +16,14 @@
               <ion-label>Home</ion-label>
             </ion-item>
 
-            <ion-item router-link="/about" router-direction="root" detail>
-              <ion-icon name="information-circle-outline" slot="start"></ion-icon>
-              <ion-label>About</ion-label>
+            <ion-item router-link="/accounts" router-direction="root" detail>
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-label>Accounts</ion-label>
+            </ion-item>
+
+            <ion-item router-link="/companies" router-direction="root" detail>
+              <ion-icon name="storefront-outline" slot="start"></ion-icon>
+              <ion-label>Companies</ion-label>
             </ion-item>
 
             <ion-item router-link="/settings" router-direction="root" detail>
@@ -27,7 +33,6 @@
           </ion-list>
         </ion-content>
       </ion-menu>
-
       <ion-page id="main-content">
         <ion-header>
           <ion-toolbar color="primary">
@@ -46,10 +51,9 @@
         </ion-header>
 
         <ion-content>
-          <ion-router-outlet id="main-content"></ion-router-outlet>
-          </ion-content>
+          <ion-router-outlet id="main-content" />
+        </ion-content>
       </ion-page>
-
     </ion-split-pane>
   </ion-app>
 </template>
@@ -77,14 +81,15 @@ import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const pageTitle = ref('My App');
+const pageTitle = ref('Trading Tools');
 
 watch(route, (newRoute) => {
   const titles: Record<string, string> = {
     '/home': 'Home',
-    '/about': 'About',
+    '/accounts': 'Accounts',
+    '/companies': 'Companies',
     '/settings': 'Settings',
   };
-  pageTitle.value = titles[newRoute.path] || 'My App';
+  pageTitle.value = titles[newRoute.path] || 'Trading Tools';
 }, { immediate: true });
 </script>

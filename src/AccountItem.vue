@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonItem, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
+import { IonItem, IonButton, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
 import { personOutline, pencilOutline, trashBinOutline } from 'ionicons/icons';
 import type { Account } from '@/types/account';
 

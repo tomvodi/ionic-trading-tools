@@ -1,4 +1,6 @@
 <template>
+  <ion-page>
+    <ion-content class="ion-padding">
   <ion-text color="secondary">
     <h2>Active Accounts</h2>
   </ion-text>
@@ -26,6 +28,8 @@
     <p v-else>No accounts found</p>
     <ion-button @click="fetchAccounts">Retry</ion-button>
   </div>
+    </ion-content>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +38,8 @@ import {
   IonText,
   IonSkeletonText,
   IonButton,
+    IonPage,
+    IonContent,
 } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
 import AccountItem from "@/AccountItem.vue";
