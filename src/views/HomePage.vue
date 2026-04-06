@@ -10,7 +10,6 @@
         :account="account"
         :show_active="false"
         :show_actions="false"
-        @click="openAccountDetail"
     />
   </ion-list>
 
@@ -36,25 +35,18 @@ import {
   IonSkeletonText,
   IonButton,
 } from '@ionic/vue';
-import { onIonViewDidEnter } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
 import AccountItem from "@/AccountItem.vue";
 import {useAccountsStore} from "@/stores/accounts.store";
+import {onMounted} from "vue";
 
 const store = useAccountsStore();
 const { accounts, loading, error } = storeToRefs(store);
 
 const fetchAccounts = () => store.fetchAccounts();
 
-const openAccountDetail = (account: any) => {
-  // navigate to detail page, open modal, etc.
-  console.log('Selected account:', account);
-  // router.push(`/accounts/${account.id}`);
-};
+onMounted(async () => {
+  await fetchAccounts();
+})
 
-onIonViewDidEnter(() => {
-  if (accounts.value.length === 0) {
-    fetchAccounts();
-  }
-});
 </script>
