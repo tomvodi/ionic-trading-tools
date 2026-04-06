@@ -8,6 +8,7 @@
         v-for="account in accounts"
         :key="account.id"
         :account="account"
+        :show_active="false"
         @click="openAccountDetail"
     />
   </ion-list>

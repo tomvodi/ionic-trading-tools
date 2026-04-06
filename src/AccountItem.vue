@@ -1,41 +1,75 @@
 <!-- src/components/AccountItem.vue -->
 <template>
-  <ion-item button @click="onClick" detail>
+  <ion-item>
     <ion-avatar slot="start">
-      <!-- optional icon / avatar -->
       <ion-icon :icon="personOutline" size="large" />
     </ion-avatar>
 
-    <ion-label>
-      <h2>{{ account.company.name + " " + account.company_identifier }}</h2>
-      <ion-badge :color="getStatusColor(account.active)">
-        {{ account.active }}
-      </ion-badge>
-    </ion-label>
+    <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="12">
+          <h3>{{ account.company.name + " " + account.company_identifier }}</h3>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col v-if="show_active" size="3">
+          <ion-badge :color="getStatusColor(account.active)" class="compact-badge">
+            {{ account.active ? "active" : "inactive" }}
+          </ion-badge>
+        </ion-col>
+        <ion-col size="4">
+          <p class="compact-row">Size: {{ account.size_k + "k" }}</p>
+        </ion-col>
+        <ion-col size="5">
+          <p  class="compact-row">Balance: {{ account.balance }}$</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-    <div slot="end" class="ion-text-end">
-      <h3 v-if="account.balance">
-        {{ account.balance.toLocaleString() }}
-      </h3>
-    </div>
+    <ion-buttons slot="end">
+      <ion-button
+          fill="clear"
+          color="medium"
+          @click.stop="onEditClick"
+      >
+        <ion-icon :icon="pencilOutline" size="small" />
+      </ion-button>
+
+      <ion-button
+          fill="clear"
+          color="danger"
+          @click.stop="onDeleteClick"
+      >
+        <ion-icon :icon="trashBinOutline" size="small" />
+      </ion-button>
+    </ion-buttons>
   </ion-item>
 </template>
 
 <script setup lang="ts">
 import { IonItem, IonLabel, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
-import { personOutline } from 'ionicons/icons';
+import { personOutline, pencilOutline, trashBinOutline } from 'ionicons/icons';
 import type { Account } from '@/types/account';
 
-const props = defineProps<{ account: Account }>();
-const emit = defineEmits<{ (e: 'click', account: Account): void }>();
+defineProps<{
+  account: Account,
+  show_active: boolean
+}>();
+
 
 const getStatusColor = (status: boolean) => {
-  return status ? 'success' :  'warning';
+  return status ? 'success' :  'danger';
 };
 
-const onClick = () => emit('click', props.account);
 </script>
 
 <style scoped>
+.compact-row {
+  margin-top: 2px;
+}
 
+.compact-badge {
+  margin-top: 2px;
+  margin-bottom: 16px;
+}
 </style>
