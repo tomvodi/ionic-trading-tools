@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router';
 
 import { IonicVue } from '@ionic/vue';
+import { addIcons } from 'ionicons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -20,6 +21,20 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
+import {
+  homeOutline,
+  informationCircleOutline,
+  settingsOutline,
+  searchOutline
+} from 'ionicons/icons';
+
+// Register the icons you want to use
+addIcons({
+  'home-outline': homeOutline,
+  'information-circle-outline': informationCircleOutline,
+  'settings-outline': settingsOutline,
+  'search-outline': searchOutline,
+});
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -33,10 +48,14 @@ import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import {createPinia} from "pinia";
+
+const pinia = createPinia();
 
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
+  .use(router)
+    .use(pinia);
 
 router.isReady().then(() => {
   app.mount('#app');
