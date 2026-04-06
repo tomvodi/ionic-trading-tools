@@ -9,6 +9,7 @@
         :key="account.id"
         :account="account"
         :show_active="false"
+        :show_actions="false"
         @click="openAccountDetail"
     />
   </ion-list>

@@ -26,7 +26,7 @@
       </ion-row>
     </ion-grid>
 
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" v-if="show_actions"  >
       <ion-button
           fill="clear"
           color="medium"
@@ -47,15 +47,15 @@
 </template>
 
 <script setup lang="ts">
-import { IonItem, IonLabel, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
+import { IonItem, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
 import { personOutline, pencilOutline, trashBinOutline } from 'ionicons/icons';
 import type { Account } from '@/types/account';
 
 defineProps<{
   account: Account,
-  show_active: boolean
+  show_active: boolean,
+  show_actions: boolean,
 }>();
-
 
 const getStatusColor = (status: boolean) => {
   return status ? 'success' :  'danger';
