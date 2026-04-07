@@ -1,10 +1,6 @@
 <template>
   <ion-page>
     <ion-content class="ion-padding">
-      <ion-text color="secondary">
-        <h2>Active Accounts</h2>
-      </ion-text>
-
       <ion-list v-if="!loading && accounts.length">
         <account-item
             v-for="account in accounts"
@@ -31,11 +27,23 @@
         <ion-button @click="fetchAccounts">Retry</ion-button>
       </div>
     </ion-content>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button @click="openCreateModal" color="primary">
+        <ion-icon :icon="add" size="large"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
     <account-edit-modal
         :is-open="showEditModal"
         :account="selectedAccount"
         @close="showEditModal = false"
         @update:account="handleAccountUpdated"
+    />
+    <account-create-modal
+        :is-open="showCreateModal"
+        @close="showCreateModal = false"
+        @created="handleAccountCreated"
     />
   </ion-page>
 </template>
@@ -48,6 +56,9 @@ import {
   IonButton,
   IonPage,
   IonContent,
+    IonFab,
+    IonFabButton,
+    IonIcon,
 } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
 import AccountItem from "@/AccountItem.vue";
@@ -56,9 +67,24 @@ import {onMounted, ref} from "vue";
 import {accountsService} from "@/services/api/accounts.service";
 import {Account} from "@/types/account";
 import AccountEditModal from "@/components/AccountEditModal.vue";
+import AccountCreateModal from "@/components/AccountCreateModal.vue";
+import {add} from "ionicons/icons";
+import {useCompaniesStore} from "@/stores/companies.store";
 
 const store = useAccountsStore();
 const { accounts, loading, error } = storeToRefs(store);
+
+const companiesStore = useCompaniesStore();
+const showCreateModal = ref(false);
+
+const openCreateModal = async () => {
+  await companiesStore.fetchCompanies();
+  showCreateModal.value = true;
+};
+
+const handleAccountCreated = () => {
+  fetchAccounts();
+};
 
 const showEditModal = ref(false);
 const selectedAccount = ref<Account | null>(null);
@@ -67,6 +93,7 @@ const fetchAccounts = () => store.fetchAccounts(false);
 
 onMounted(async () => {
   await fetchAccounts();
+  await companiesStore.fetchCompanies();
 })
 
 const openEditModal = (account: Account) => {

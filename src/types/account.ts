@@ -15,3 +15,9 @@ export interface AccountUpdate {
     size_k?: number;
     balance?: number;
 }
+
+export interface AccountCreate {
+    company_id:  string;
+    company_identifier: string;
+    size_k: number;
+}

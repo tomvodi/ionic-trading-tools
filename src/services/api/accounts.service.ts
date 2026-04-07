@@ -1,5 +1,5 @@
 import axios from 'axios'; // or use native fetch if you prefer
-import type {Account, AccountUpdate} from '@/types/account';
+import type {Account, AccountCreate, AccountUpdate} from '@/types/account';
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -24,5 +24,9 @@ export const accountsService = {
 
     async update(id: string, accountUpdate : AccountUpdate): Promise<void> {
         await api.put(`/accounts/${id}`, accountUpdate);
+    },
+
+    async create(accountCreate : AccountCreate): Promise<void> {
+        await api.post(`/accounts`, accountCreate);
     },
 };
