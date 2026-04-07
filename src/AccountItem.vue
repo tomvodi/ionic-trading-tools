@@ -12,15 +12,23 @@
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
+        <ion-col v-if="show_active" size="auto">
+          <ion-toggle
+              :checked="account.active"
+              :disabled="isToggling"
+              @ionChange="toggleActive"
+              class="toggle-status compact-badge"
+          />
+        </ion-col>
         <ion-col v-if="show_active" size="3">
           <ion-badge :color="getStatusColor(account.active)" class="compact-badge">
             {{ account.active ? "active" : "inactive" }}
           </ion-badge>
         </ion-col>
-        <ion-col size="4">
+        <ion-col size="3">
           <p class="compact-row">Size: {{ account.size_k + "k" }}</p>
         </ion-col>
-        <ion-col size="5">
+        <ion-col size="3">
           <p  class="compact-row">Balance: {{ account.balance }}$</p>
         </ion-col>
       </ion-row>
@@ -47,15 +55,51 @@
 </template>
 
 <script setup lang="ts">
-import { IonItem, IonButton, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
+import { IonItem, IonButton, IonToggle, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
 import { personOutline, pencilOutline, trashBinOutline } from 'ionicons/icons';
 import type { Account } from '@/types/account';
+import {ref} from "vue";
 
-defineProps<{
+const props = defineProps<{
   account: Account,
   show_active: boolean,
   show_actions: boolean,
 }>();
+
+const emit = defineEmits<{
+  (e: 'toggle', accountId: string | number, newStatus: boolean): void;
+  (e: 'edit', account: Account): void;
+  (e: 'delete', account: Account): void;
+}>();
+
+const isToggling = ref(false);
+
+const toggleActive = async (ev: CustomEvent) => {
+  const newIsActive = ev.detail.checked;
+  console.log("set toggle active", newIsActive);
+  isToggling.value = true;
+
+  try {
+    emit('toggle', props.account.id, newIsActive);
+  } catch (err) {
+    // Revert toggle on error
+    if (ev.target != null) {
+      ev.target.checked = !newIsActive;
+    }
+  } finally {
+    isToggling.value = false;
+  }
+};
+
+const onEditClick = (e: Event) => {
+  e.stopPropagation();
+  emit('edit', props.account);
+};
+
+const onDeleteClick = (e: Event) => {
+  e.stopPropagation();
+  emit('delete', props.account);
+};
 
 const getStatusColor = (status: boolean) => {
   return status ? 'success' :  'danger';

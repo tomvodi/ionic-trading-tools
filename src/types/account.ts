@@ -8,3 +8,10 @@ export interface Account {
     balance?: number;
     active: boolean;
 }
+
+// Type specifically for updates (flat, no nested company)
+export interface AccountUpdate {
+    company_identifier?: string;
+    size_k?: number;
+    balance?: number;
+}
