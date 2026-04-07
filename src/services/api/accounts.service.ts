@@ -29,4 +29,8 @@ export const accountsService = {
     async create(accountCreate : AccountCreate): Promise<void> {
         await api.post(`/accounts`, accountCreate);
     },
+
+    async delete(id: string): Promise<void> {
+        await api.delete(`/accounts/${id}`);
+    },
 };

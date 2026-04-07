@@ -10,6 +10,7 @@
             :show_actions="true"
             @toggle="toggleAccountStatus"
             @edit="openEditModal"
+            @delete="confirmDelete"
         />
       </ion-list>
 
@@ -51,14 +52,13 @@
 <script setup lang="ts">
 import {
   IonList,
-  IonText,
   IonSkeletonText,
   IonButton,
   IonPage,
   IonContent,
-    IonFab,
-    IonFabButton,
-    IonIcon,
+  IonFab,
+  IonFabButton,
+  IonIcon, alertController,
 } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
 import AccountItem from "@/AccountItem.vue";
@@ -70,6 +70,7 @@ import AccountEditModal from "@/components/AccountEditModal.vue";
 import AccountCreateModal from "@/components/AccountCreateModal.vue";
 import {add} from "ionicons/icons";
 import {useCompaniesStore} from "@/stores/companies.store";
+import {presentToast} from "@/utils/toast";
 
 const store = useAccountsStore();
 const { accounts, loading, error } = storeToRefs(store);
@@ -84,6 +85,7 @@ const openCreateModal = async () => {
 
 const handleAccountCreated = () => {
   fetchAccounts();
+  presentToast('Account created successfully!', 'success');
 };
 
 const showEditModal = ref(false);
@@ -101,6 +103,44 @@ const openEditModal = (account: Account) => {
   showEditModal.value = true;
 };
 
+const confirmDelete = async (account: Account) => {
+  const alert = await alertController.create({
+    header: 'Delete Account',
+    message: `Are you sure you want to delete ${account.company?.name + " " + account.company_identifier}?`,
+    cssClass: 'custom-alert',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      },
+      {
+        text: 'Delete',
+        role: 'destructive',
+        handler: () => performDelete(account)
+      }
+    ]
+  });
+
+  await alert.present();
+};
+
+const performDelete = async (account: Account) => {
+  try {
+    await accountsService.delete(account.id);
+
+    // Remove from local list
+    accounts.value = accounts.value.filter(a => a.id !== account.id);
+
+    // Show success toast
+    await presentToast('Account deleted successfully', 'success');
+  } catch (err: any) {
+    await presentToast(
+        err.response?.data?.message || 'Failed to delete account',
+        'danger'
+    );
+  }
+};
+
 const handleAccountUpdated = (updatedData: Partial<Account>) => {
   if (!selectedAccount.value) return;
 
@@ -111,6 +151,8 @@ const handleAccountUpdated = (updatedData: Partial<Account>) => {
   }
 
   showEditModal.value = false;
+
+  presentToast('Account updated successfully', 'success');
 };
 
 const toggleAccountStatus = async (accountId: string, newIsActive: boolean) => {
