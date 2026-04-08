@@ -7,6 +7,7 @@ export interface Account {
     size_k: number;
     balance?: number;
     active: boolean;
+    position: number;
 }
 
 // Type specifically for updates (flat, no nested company)
@@ -14,10 +15,12 @@ export interface AccountUpdate {
     company_identifier?: string;
     size_k?: number;
     balance?: number;
+    position?: number;
 }
 
 export interface AccountCreate {
     company_id:  string;
     company_identifier: string;
     size_k: number;
+    position: number;
 }

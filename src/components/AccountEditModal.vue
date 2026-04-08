@@ -41,6 +41,16 @@
               placeholder="0.00"
           />
         </ion-item>
+
+        <!-- Position -->
+        <ion-item>
+          <ion-label position="stacked">Position</ion-label>
+          <ion-input
+              v-model="form.position"
+              type="number"
+              placeholder="0"
+          />
+        </ion-item>
       </ion-list>
 
       <!-- Error Message -->
@@ -96,7 +106,8 @@ watch(() => props.account, (acc) => {
     form.value = {
       company_identifier: acc.company_identifier,
       size_k: acc.size_k,
-      balance: acc.balance ?? 0
+      balance: acc.balance ?? 0,
+      position: acc.position ?? 0
     };
   }
 }, { immediate: true });
@@ -117,6 +128,11 @@ const getCleanUpdateData = (): AccountUpdate => {
   // Convert balance to number (if present)
   if (form.value.balance !== undefined) {
     data.balance = form.value.balance ? Number(form.value.balance) : 0;
+  }
+
+  // Convert position to number (if present)
+  if (form.value.position !== undefined) {
+    data.position = form.value.position ? Number(form.value.position) : 0;
   }
 
   return data;

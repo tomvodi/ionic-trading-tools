@@ -7,8 +7,13 @@
 
     <ion-grid>
       <ion-row class="ion-align-items-center">
-        <ion-col size="12">
+        <ion-col size="10">
           <h3>{{ account.company.name + " " + account.company_identifier }}</h3>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-text color="medium">
+            <p class="ion-text-end">Pos: {{account.position}}</p>
+          </ion-text>
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
@@ -55,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { IonItem, IonButton, IonToggle, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
+import { IonItem, IonText, IonButton, IonToggle, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon, IonBadge } from '@ionic/vue';
 import { personOutline, pencilOutline, trashBinOutline } from 'ionicons/icons';
 import type { Account } from '@/types/account';
 import {ref} from "vue";

@@ -40,6 +40,12 @@
           <ion-label position="stacked">Size (k)</ion-label>
           <ion-input v-model="form.size_k" type="number" placeholder="0" />
         </ion-item>
+
+        <!-- Size k -->
+        <ion-item>
+          <ion-label position="stacked">Position</ion-label>
+          <ion-input v-model="form.position" type="number" placeholder="0" />
+        </ion-item>
       </ion-list>
 
       <ion-text v-if="error" color="danger" class="ion-padding">{{ error }}</ion-text>
@@ -67,7 +73,7 @@ const companiesStore = useCompaniesStore();
 const companies = computed(() => companiesStore.companies);
 
 const selectedCompanyId = ref<string | null>(null);
-const form = ref({ company_identifier: '', size_k: 0 });
+const form = ref({ company_identifier: '', size_k: 0, position: 0 });
 const saving = ref(false);
 const error = ref<string | null>(null);
 
@@ -81,6 +87,7 @@ const save = async () => {
     company_id: selectedCompanyId.value,
     company_identifier: form.value.company_identifier,
     size_k: Number(form.value.size_k),
+    position: Number(form.value.position),
   };
 
   try {
@@ -96,7 +103,7 @@ const save = async () => {
 
 const closeModal = () => {
   selectedCompanyId.value = null;
-  form.value = { company_identifier: '', size_k: 0 };
+  form.value = { company_identifier: '', size_k: 0, position: 0 };
   error.value = null;
   emit('close');
 };
