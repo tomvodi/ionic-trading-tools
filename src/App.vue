@@ -79,9 +79,30 @@ import {
 } from '@ionic/vue';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useSettingsStore } from '@/stores/settings.store';
+import { storeToRefs } from 'pinia';
 
 const route = useRoute();
 const pageTitle = ref('Trading Tools');
+
+const settingsStore = useSettingsStore();
+const { theme } = storeToRefs(settingsStore);
+
+// Watch theme changes and apply to document
+watch(theme, (newTheme) => {
+  const html = document.documentElement;
+  html.classList.remove('ion-theme-dark');
+  if (newTheme === 'dark') {
+    html.classList.add('ion-theme-dark');
+  } else if (newTheme === 'light') {
+    // No class for light, default is light
+  } else if (newTheme === 'system') {
+    // For system, check current preference
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      html.classList.add('ion-theme-dark');
+    }
+  }
+}, { immediate: true });
 
 watch(route, (newRoute) => {
   const titles: Record<string, string> = {
