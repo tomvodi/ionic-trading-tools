@@ -1,10 +1,6 @@
 // src/services/api/companies.service.ts
-import axios from 'axios';
 import type { Company } from '@/types/company';
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-});
+import api from "./client";
 
 export const companiesService = {
     async getAll(): Promise<Company[]> {

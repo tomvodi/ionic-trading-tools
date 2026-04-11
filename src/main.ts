@@ -53,6 +53,7 @@ import '@ionic/vue/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import {createPinia} from "pinia";
+import {useSettingsStore} from "@/stores/settings.store";
 
 const pinia = createPinia();
 
@@ -60,6 +61,10 @@ const app = createApp(App)
   .use(IonicVue)
   .use(router)
     .use(pinia);
+
+// Load settings as early as possible
+const settings = useSettingsStore();
+await settings.loadSettings();   // fire and forget is okay here
 
 router.isReady().then(() => {
   app.mount('#app');
