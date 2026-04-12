@@ -1,16 +1,16 @@
 <!-- src/components/AccountItem.vue -->
 <template>
   <ion-item>
-    <ion-avatar slot="start">
+    <ion-avatar slot="start" class="ion-hide-sm-down">
       <ion-icon :icon="personOutline" size="large" />
     </ion-avatar>
 
     <ion-grid>
       <ion-row class="ion-align-items-center">
-        <ion-col size="10">
+        <ion-col size="12" size-sm="10">
           <h3>{{ account.company.name + " " + account.company_identifier }}</h3>
         </ion-col>
-        <ion-col size="auto">
+        <ion-col size-sm="2" class="ion-hide-sm-down">
           <ion-text color="medium">
             <p class="ion-text-end">Pos: {{account.position}}</p>
           </ion-text>
@@ -37,9 +37,26 @@
           <p  class="compact-row">Balance: {{ account.balance }}$</p>
         </ion-col>
       </ion-row>
+      <ion-row v-if="show_actions" class="ion-align-items-left ion-hide-sm-up">
+        <ion-button
+            fill="clear"
+            color="medium"
+            @click.stop="onEditClick"
+        >
+          <ion-icon :icon="pencilOutline" size="small" />
+        </ion-button>
+
+        <ion-button
+            fill="clear"
+            color="danger"
+            @click.stop="onDeleteClick"
+        >
+          <ion-icon :icon="trashBinOutline" size="small" />
+        </ion-button>
+      </ion-row>
     </ion-grid>
 
-    <ion-buttons slot="end" v-if="show_actions"  >
+    <ion-buttons slot="end" v-if="show_actions"  class="ion-hide-sm-down">
       <ion-button
           fill="clear"
           color="medium"
