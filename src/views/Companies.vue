@@ -8,6 +8,7 @@
             :company="company"
             :show_actions="true"
             @open="openDashboard"
+            @delete="confirmDelete"
         />
       </ion-list>
 
@@ -59,6 +60,8 @@ import { onMounted, ref } from "vue";
 import { add } from "ionicons/icons";
 import type { Company } from "@/types/company";
 import { presentToast } from "@/utils/toast";
+import { alertController } from '@ionic/vue';
+import { companiesService } from "@/services/api/companies.service";
 
 const store = useCompaniesStore();
 const { companies, loading } = storeToRefs(store);
@@ -83,6 +86,44 @@ onMounted(async () => {
 const openDashboard = (company: Company) => {
   if (company.dashboard_url) {
     window.open(company.dashboard_url, '_blank');
+  }
+};
+
+const confirmDelete = async (company: Company) => {
+  const alert = await alertController.create({
+    header: 'Delete Company',
+    message: `Are you sure you want to delete ${company.name}?`,
+    cssClass: 'custom-alert',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      },
+      {
+        text: 'Delete',
+        role: 'destructive',
+        handler: () => performDelete(company)
+      }
+    ]
+  });
+
+  await alert.present();
+};
+
+const performDelete = async (company: Company) => {
+  try {
+    await companiesService.delete(company.id);
+
+    // Remove from local list
+    companies.value = companies.value.filter(c => c.id !== company.id);
+
+    // Show success toast
+    await presentToast('Company deleted successfully', 'success');
+  } catch (err: any) {
+    await presentToast(
+        err.response?.data?.message || 'Failed to delete company',
+        'danger'
+    );
   }
 };
 </script>

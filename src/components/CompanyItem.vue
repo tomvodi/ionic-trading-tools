@@ -20,13 +20,22 @@
       </ion-row>
     </ion-grid>
 
-    <ion-buttons slot="end" v-if="show_actions && company.dashboard_url" class="ion-hide-sm-down">
+    <ion-buttons slot="end"  class="ion-hide-sm-down">
       <ion-button
+          v-if="show_actions && company.dashboard_url"
           fill="clear"
           color="medium"
           @click.stop="onEditClick"
       >
         <ion-icon :icon="openOutline" size="small" />
+      </ion-button>
+
+      <ion-button
+          fill="clear"
+          color="danger"
+          @click.stop="onDeleteClick"
+      >
+        <ion-icon :icon="trashBinOutline" size="small" />
       </ion-button>
     </ion-buttons>
   </ion-item>
@@ -34,7 +43,7 @@
 
 <script setup lang="ts">
 import { IonItem, IonText, IonButton, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon } from '@ionic/vue';
-import { businessOutline, openOutline } from 'ionicons/icons';
+import { businessOutline, openOutline, trashBinOutline } from 'ionicons/icons';
 import type { Company } from '@/types/company';
 
 const props = defineProps<{
@@ -44,11 +53,17 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'open', company: Company): void;
+  (e: 'delete', company: Company): void;
 }>();
 
 const onEditClick = (e: Event) => {
   e.stopPropagation();
   emit('open', props.company);
+};
+
+const onDeleteClick = (e: Event) => {
+  e.stopPropagation();
+  emit('delete', props.company);
 };
 </script>
 

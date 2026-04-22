@@ -11,4 +11,7 @@ export const companiesService = {
         const { data } = await api.post<Company>('/companies', payload);
         return data;
     },
+    async delete(id: string): Promise<void> {
+        await api.delete(`/companies/${id}`);
+    },
 };
