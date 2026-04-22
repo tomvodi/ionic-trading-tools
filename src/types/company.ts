@@ -3,3 +3,8 @@ export interface Company {
     name: string;
     dashboard_url?: string;
 }
+
+export interface CompanyCreate {
+    name: string;
+    dashboard_url?: string;
+}

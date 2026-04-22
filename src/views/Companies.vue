@@ -25,6 +25,18 @@
         <ion-button @click="fetchCompanies">Retry</ion-button>
       </div>
     </ion-content>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button @click="openCreateModal" color="primary">
+        <ion-icon :icon="add" size="large"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+    <company-create-modal
+        :is-open="showCreateModal"
+        @close="showCreateModal = false"
+        @created="handleCompanyCreated"
+    />
   </ion-page>
 </template>
 
@@ -35,18 +47,34 @@ import {
   IonButton,
   IonPage,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
 import CompanyItem from "@/components/CompanyItem.vue";
+import CompanyCreateModal from "@/components/CompanyCreateModal.vue";
 import { useCompaniesStore } from "@/stores/companies.store";
 import { onMounted, ref } from "vue";
+import { add } from "ionicons/icons";
 import type { Company } from "@/types/company";
+import { presentToast } from "@/utils/toast";
 
 const store = useCompaniesStore();
 const { companies, loading } = storeToRefs(store);
 const error = ref(false);
+const showCreateModal = ref(false);
 
 const fetchCompanies = () => store.fetchCompanies();
+
+const openCreateModal = () => {
+  showCreateModal.value = true;
+};
+
+const handleCompanyCreated = () => {
+  fetchCompanies();
+  presentToast('Company created successfully!', 'success');
+};
 
 onMounted(async () => {
   await fetchCompanies();

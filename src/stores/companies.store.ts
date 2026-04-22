@@ -6,13 +6,15 @@ import { companiesService } from '@/services/api/companies.service';
 export const useCompaniesStore = defineStore('companies', () => {
     const companies = ref<Company[]>([]);
     const loading = ref(false);
+    const error = ref<string | null>(null);
 
     const fetchCompanies = async () => {
-        if (companies.value.length > 0) return; // already loaded
         loading.value = true;
+        error.value = null;
         try {
             companies.value = await companiesService.getAll();
-        } catch (e) {
+        } catch (e: any) {
+            error.value = e.message || 'Failed to load companies';
             console.error(e);
         } finally {
             loading.value = false;
