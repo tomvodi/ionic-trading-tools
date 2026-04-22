@@ -2,17 +2,217 @@
   <ion-page>
     <ion-content class="ion-padding">
       <ion-text color="secondary">
-        <h2>Position Size</h2>
+        <h2>Position Size Calculator</h2>
       </ion-text>
-      <p>Position Size Calculator coming soon...</p>
+
+      <ion-card>
+        <ion-card-content>
+          <ion-list>
+            <!-- Direction Toggle -->
+            <ion-item>
+              <ion-label>Position Direction</ion-label>
+              <ion-toggle
+                  v-model="isLong"
+                  @ionChange="calculatePositionSize"
+                  slot="end"
+              >
+                <ion-label slot="start">{{ isLong ? 'Long' : 'Short' }}</ion-label>
+              </ion-toggle>
+            </ion-item>
+
+            <!-- Account Size -->
+            <ion-item>
+              <ion-label position="stacked">Account Size ($)</ion-label>
+              <ion-input
+                  v-model="accountSize"
+                  type="number"
+                  placeholder="10000"
+                  @ionInput="calculatePositionSize"
+              />
+            </ion-item>
+
+            <!-- Risk Percentage -->
+            <ion-item>
+              <ion-label position="stacked">Risk (%)</ion-label>
+              <ion-input
+                  v-model="riskPercentage"
+                  type="number"
+                  step="0.1"
+                  placeholder="0.5"
+                  @ionInput="calculatePositionSize"
+              />
+            </ion-item>
+
+            <!-- Risk Percentage Buttons -->
+            <ion-item>
+              <ion-label>Risk Presets</ion-label>
+              <div class="risk-buttons" slot="end">
+                <ion-button
+                    v-for="preset in riskPresets"
+                    :key="preset"
+                    size="small"
+                    fill="outline"
+                    @click="setRiskPercentage(preset)"
+                >
+                  {{ preset }}%
+                </ion-button>
+              </div>
+            </ion-item>
+
+            <!-- Entry Price -->
+            <ion-item>
+              <ion-label position="stacked">Entry Price ($)</ion-label>
+              <ion-input
+                  v-model="entryPrice"
+                  type="number"
+                  step="0.01"
+                  placeholder="100.00"
+                  @ionInput="calculatePositionSize"
+              />
+            </ion-item>
+
+            <!-- Stop Loss Price -->
+            <ion-item>
+              <ion-label position="stacked">Stop Loss Price ($)</ion-label>
+              <ion-input
+                  v-model="stopLossPrice"
+                  type="number"
+                  step="0.01"
+                  placeholder="95.00"
+                  @ionInput="calculatePositionSize"
+              />
+            </ion-item>
+          </ion-list>
+
+          <!-- Results -->
+          <ion-card v-if="positionSize !== null" class="ion-margin-top">
+            <ion-card-header>
+              <ion-card-title>Position Size Results</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-text>
+                      <h3>Risk Amount:</h3>
+                      <p>${{ riskAmount.toFixed(2) }}</p>
+                    </ion-text>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-text>
+                      <h3>Position Size:</h3>
+                      <p>${{ positionSize.toFixed(2) }}</p>
+                    </ion-text>
+                  </ion-col>
+                </ion-row>
+                <ion-row v-if="stopLossDistance > 0">
+                  <ion-col size="6">
+                    <ion-text>
+                      <h3>Stop Loss Distance:</h3>
+                      <p>${{ stopLossDistance.toFixed(2) }}</p>
+                    </ion-text>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-text>
+                      <h3>Risk per Share:</h3>
+                      <p>${{ riskPerShare.toFixed(4) }}</p>
+                    </ion-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-card-content>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { IonPage, IonContent, IonText } from '@ionic/vue';
+import {
+  IonPage,
+  IonContent,
+  IonText,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonToggle,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol
+} from '@ionic/vue';
+import { ref, computed, watch } from 'vue';
+
+// Reactive data
+const isLong = ref(true);
+const accountSize = ref('');
+const riskPercentage = ref('');
+const entryPrice = ref('');
+const stopLossPrice = ref('');
+
+// Risk presets
+const riskPresets = [0.2, 0.3, 0.5, 0.8, 1];
+
+// Computed values
+const riskAmount = computed(() => {
+  const account = parseFloat(accountSize.value) || 0;
+  const risk = parseFloat(riskPercentage.value) || 0;
+  return (account * risk) / 100;
+});
+
+const stopLossDistance = computed(() => {
+  const entry = parseFloat(entryPrice.value) || 0;
+  const stop = parseFloat(stopLossPrice.value) || 0;
+  return Math.abs(entry - stop);
+});
+
+const riskPerShare = computed(() => {
+  const distance = stopLossDistance.value;
+  return distance > 0 ? riskAmount.value / distance : 0;
+});
+
+const positionSize = computed(() => {
+  const risk = riskPerShare.value;
+  const entry = parseFloat(entryPrice.value) || 0;
+  return entry > 0 ? risk * entry : null;
+});
+
+// Methods
+const setRiskPercentage = (percentage: number) => {
+  riskPercentage.value = percentage.toString();
+  calculatePositionSize();
+};
+
+const calculatePositionSize = () => {
+  // This will trigger the computed properties to recalculate
+  // The actual calculation happens in the computed properties above
+};
+
+// Watch for changes to recalculate
+watch([accountSize, riskPercentage, entryPrice, stopLossPrice, isLong], () => {
+  calculatePositionSize();
+});
 </script>
 
 <style scoped>
+.risk-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 8px;
+}
 
+.risk-buttons ion-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+}
 </style>
