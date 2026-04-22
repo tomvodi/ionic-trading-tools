@@ -11,13 +11,24 @@
             <!-- Direction Toggle -->
             <ion-item>
               <ion-label>Position Direction</ion-label>
-              <ion-toggle
-                  v-model="isLong"
-                  @ionChange="calculatePositionSize"
-                  slot="end"
-              >
-                <ion-label slot="start">{{ isLong ? 'Long' : 'Short' }}</ion-label>
-              </ion-toggle>
+              <div class="direction-toggle" slot="end">
+                <ion-button
+                    :fill="isLong ? 'solid' : 'outline'"
+                    color="success"
+                    size="small"
+                    @click="isLong = true"
+                >
+                  Long
+                </ion-button>
+                <ion-button
+                    :fill="!isLong ? 'solid' : 'outline'"
+                    color="danger"
+                    size="small"
+                    @click="isLong = false"
+                >
+                  Short
+                </ion-button>
+              </div>
             </ion-item>
 
             <!-- Account Size -->
@@ -141,7 +152,6 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonToggle,
   IonButton,
   IonGrid,
   IonRow,
@@ -214,5 +224,10 @@ watch([accountSize, riskPercentage, entryPrice, stopLossPrice, isLong], () => {
   --padding-end: 8px;
   --padding-top: 4px;
   --padding-bottom: 4px;
+}
+
+.direction-toggle {
+  display: flex;
+  gap: 8px;
 }
 </style>
