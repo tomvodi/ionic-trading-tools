@@ -20,7 +20,7 @@
       </ion-row>
     </ion-grid>
 
-    <ion-buttons slot="end" v-if="show_actions" class="ion-hide-sm-down">
+    <ion-buttons slot="end" v-if="show_actions && company.dashboard_url" class="ion-hide-sm-down">
       <ion-button
           fill="clear"
           color="medium"
@@ -57,4 +57,3 @@ const onEditClick = (e: Event) => {
   margin-top: 2px;
 }
 </style>
-
