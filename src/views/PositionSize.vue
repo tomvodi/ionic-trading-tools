@@ -54,21 +54,16 @@
               />
             </ion-item>
 
-            <!-- Risk Percentage Buttons -->
-            <ion-item>
-              <ion-label>Risk Presets</ion-label>
-              <div class="risk-buttons" slot="end">
-                <ion-button
-                    v-for="preset in riskPresets"
-                    :key="preset"
-                    size="small"
-                    fill="outline"
-                    @click="setRiskPercentage(preset)"
-                >
-                  {{ preset }}%
-                </ion-button>
-              </div>
-            </ion-item>
+            <!-- Risk Percentage Chips -->
+            <div class="chips-container">
+              <ion-chip
+                  v-for="preset in riskPresets"
+                  :key="preset"
+                  @click="setRiskPercentage(preset)"
+              >
+                <ion-label>{{ preset }}%</ion-label>
+              </ion-chip>
+            </div>
 
             <!-- Entry Price -->
             <ion-item>
@@ -153,6 +148,7 @@ import {
   IonLabel,
   IonInput,
   IonButton,
+  IonChip,
   IonGrid,
   IonRow,
   IonCol
@@ -229,5 +225,12 @@ watch([accountSize, riskPercentage, entryPrice, stopLossPrice, isLong], () => {
 .direction-toggle {
   display: flex;
   gap: 8px;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 </style>
