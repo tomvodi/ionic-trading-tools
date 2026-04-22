@@ -22,15 +22,25 @@
 
     <ion-buttons slot="end"  class="ion-hide-sm-down">
       <ion-button
-          v-if="show_actions && company.dashboard_url"
+          v-if="show_actions && company.dashboard_url && company.dashboard_url.trim()"
+          fill="clear"
+          color="primary"
+          @click.stop="onOpenClick"
+      >
+        <ion-icon :icon="openOutline" size="small" />
+      </ion-button>
+      
+      <ion-button
+          v-if="show_actions"
           fill="clear"
           color="medium"
           @click.stop="onEditClick"
       >
-        <ion-icon :icon="openOutline" size="small" />
+        <ion-icon :icon="pencilOutline" size="small" />
       </ion-button>
 
       <ion-button
+          v-if="show_actions"
           fill="clear"
           color="danger"
           @click.stop="onDeleteClick"
@@ -43,7 +53,7 @@
 
 <script setup lang="ts">
 import { IonItem, IonText, IonButton, IonRow, IonGrid, IonCol, IonButtons, IonAvatar, IonIcon } from '@ionic/vue';
-import { businessOutline, openOutline, trashBinOutline } from 'ionicons/icons';
+import { businessOutline, openOutline, trashBinOutline, pencilOutline } from 'ionicons/icons';
 import type { Company } from '@/types/company';
 
 const props = defineProps<{
@@ -53,17 +63,23 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'open', company: Company): void;
+  (e: 'edit', company: Company): void;
   (e: 'delete', company: Company): void;
 }>();
 
 const onEditClick = (e: Event) => {
   e.stopPropagation();
-  emit('open', props.company);
+  emit('edit', props.company);
 };
 
 const onDeleteClick = (e: Event) => {
   e.stopPropagation();
   emit('delete', props.company);
+};
+
+const onOpenClick = (e: Event) => {
+  e.stopPropagation();
+  emit('open', props.company);
 };
 </script>
 

@@ -8,6 +8,7 @@
             :company="company"
             :show_actions="true"
             @open="openDashboard"
+            @edit="openEditModal"
             @delete="confirmDelete"
         />
       </ion-list>
@@ -38,6 +39,12 @@
         @close="showCreateModal = false"
         @created="handleCompanyCreated"
     />
+    <company-edit-modal
+        :is-open="showEditModal"
+        :company="selectedCompany"
+        @close="showEditModal = false"
+        @update:company="handleCompanyUpdated"
+    />
   </ion-page>
 </template>
 
@@ -55,6 +62,7 @@ import {
 import { storeToRefs } from 'pinia';
 import CompanyItem from "@/components/CompanyItem.vue";
 import CompanyCreateModal from "@/components/CompanyCreateModal.vue";
+import CompanyEditModal from "@/components/CompanyEditModal.vue";
 import { useCompaniesStore } from "@/stores/companies.store";
 import { onMounted, ref } from "vue";
 import { add } from "ionicons/icons";
@@ -67,6 +75,8 @@ const store = useCompaniesStore();
 const { companies, loading } = storeToRefs(store);
 const error = ref(false);
 const showCreateModal = ref(false);
+const showEditModal = ref(false);
+const selectedCompany = ref<Company | null>(null);
 
 const fetchCompanies = () => store.fetchCompanies();
 
@@ -74,9 +84,19 @@ const openCreateModal = () => {
   showCreateModal.value = true;
 };
 
+const openEditModal = (company: Company) => {
+  selectedCompany.value = company;
+  showEditModal.value = true;
+};
+
 const handleCompanyCreated = () => {
   fetchCompanies();
   presentToast('Company created successfully!', 'success');
+};
+
+const handleCompanyUpdated = () => {
+  fetchCompanies();
+  presentToast('Company updated successfully!', 'success');
 };
 
 onMounted(async () => {
