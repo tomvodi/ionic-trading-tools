@@ -11,6 +11,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import ('../views/HomePage.vue')
   },
   {
+    path: '/position-size',
+    component: () => import('../views/PositionSize.vue')
+  },
+  {
     path: '/accounts',
     component: () => import('../views/Accounts.vue')
   },

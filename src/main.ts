@@ -25,7 +25,7 @@ import {
   homeOutline,
   informationCircleOutline,
   settingsOutline,
-  searchOutline, pencilOutline, trashOutline, storefrontOutline, personOutline
+  searchOutline, pencilOutline, trashOutline, storefrontOutline, personOutline, calculatorOutline
 } from 'ionicons/icons';
 
 // Register the icons you want to use
@@ -38,6 +38,7 @@ addIcons({
   'trash-outline': trashOutline,
   'storefront-outline': storefrontOutline,
   'person-outline': personOutline,
+  'calculator-outline': calculatorOutline,
 });
 /**
  * Ionic Dark Mode

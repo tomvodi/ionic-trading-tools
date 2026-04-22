@@ -29,7 +29,7 @@
       >
         <ion-icon :icon="openOutline" size="small" />
       </ion-button>
-      
+
       <ion-button
           v-if="show_actions"
           fill="clear"

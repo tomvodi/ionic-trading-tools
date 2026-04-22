@@ -16,6 +16,11 @@
               <ion-label>Home</ion-label>
             </ion-item>
 
+            <ion-item router-link="/position-size" router-direction="root" detail>
+              <ion-icon name="calculator-outline" slot="start"></ion-icon>
+              <ion-label>Position Size</ion-label>
+            </ion-item>
+
             <ion-item router-link="/accounts" router-direction="root" detail>
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-label>Accounts</ion-label>
@@ -107,6 +112,7 @@ watch(theme, (newTheme) => {
 watch(route, (newRoute) => {
   const titles: Record<string, string> = {
     '/home': 'Home',
+    '/position-size': 'Position Size',
     '/accounts': 'Accounts',
     '/companies': 'Companies',
     '/settings': 'Settings',
