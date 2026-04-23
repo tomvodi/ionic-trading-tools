@@ -162,8 +162,16 @@
                   <ion-row>
                     <ion-col size="6">
                       <ion-text>
-                        <h3>Real Leverage:</h3>
-                        <p>{{ realLeverage !== null ? realLeverage.toFixed(1) + 'x' : 'N/A' }}</p>
+                        <h3 class="prominent-text">Real Leverage:</h3>
+                        <p class="prominent-text">{{ realLeverage !== null ? realLeverage.toFixed(1) + 'x' : 'N/A' }}</p>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Position Size with Leverage:</h3>
+                        <p>${{ positionSizeWithLeverage !== null ? positionSizeWithLeverage.toFixed(2) : 'N/A' }}</p>
                       </ion-text>
                     </ion-col>
                   </ion-row>
@@ -272,6 +280,12 @@ const liquidationPrice = computed(() => {
   return isLong.value ? entry - priceMove : entry + priceMove;
 });
 
+const positionSizeWithLeverage = computed(() => {
+  const size = positionSize.value;
+  const realLev = realLeverage.value;
+  return size !== null && realLev !== null ? size / realLev : null;
+});
+
 // Methods
 const setRiskPercentage = (percentage: number) => {
   riskPercentage.value = percentage.toString();
@@ -304,5 +318,10 @@ watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice, i
 
 .light-text {
   opacity: 0.6;
+}
+
+.prominent-text {
+  font-weight: bold;
+  font-size: 1.2em;
 }
 </style>
