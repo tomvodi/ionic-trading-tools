@@ -29,7 +29,7 @@
                       <ion-item>
                         <ion-label position="stacked">Risk (%)</ion-label>
                         <ion-input
-                            v-model="riskPercentage"
+                            v-model="settingsStore.riskPercentage"
                             type="number"
                             step="0.1"
                             placeholder="0.5"
@@ -224,7 +224,6 @@ const settingsStore = useSettingsStore();
 
 // Reactive data
 const accountSize = ref('');
-const riskPercentage = ref('');
 const entryPrice = ref('');
 const stopLossPrice = ref('');
 
@@ -241,7 +240,7 @@ const isLong = computed(() => {
 
 const riskAmount = computed(() => {
   const account = parseFloat(accountSize.value) || 0;
-  const risk = parseFloat(riskPercentage.value) || 0;
+  const risk = settingsStore.riskPercentage || 0;
   return (account * risk) / 100;
 });
 
@@ -301,7 +300,7 @@ const positionSizeWithLeverage = computed(() => {
 
 // Methods
 const setRiskPercentage = (percentage: number) => {
-  riskPercentage.value = percentage.toString();
+  settingsStore.riskPercentage = percentage;
   calculatePositionSize();
 };
 
@@ -311,7 +310,7 @@ const calculatePositionSize = () => {
 };
 
 // Watch for changes to recalculate
-watch([accountSize, riskPercentage, entryPrice, stopLossPrice], () => {
+watch([accountSize, settingsStore.riskPercentage, entryPrice, stopLossPrice], () => {
   calculatePositionSize();
 });
 
