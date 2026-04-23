@@ -167,6 +167,14 @@
                       </ion-text>
                     </ion-col>
                   </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Liquidation Price:</h3>
+                        <p>${{ liquidationPrice !== null ? liquidationPrice.toFixed(2) : 'N/A' }}</p>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
                 </ion-grid>
               </ion-card-content>
             </ion-card>
@@ -249,6 +257,19 @@ const realLeverage = computed(() => {
   const maxLeverage = leverage.value;
   const factor = parseFloat(securityFactor.value) || 1;
   return maxLeverage !== null ? maxLeverage * factor : null;
+});
+
+const liquidationPrice = computed(() => {
+  const entry = parseFloat(entryPrice.value) || 0;
+  const realLev = realLeverage.value;
+
+  if (entry <= 0 || realLev === null || realLev === 0) return null;
+
+  const priceMove = entry / realLev;
+
+  // For long positions, liquidation is below entry price
+  // For short positions, liquidation is above entry price
+  return isLong.value ? entry - priceMove : entry + priceMove;
 });
 
 // Methods
