@@ -159,6 +159,14 @@
                       </ion-text>
                     </ion-col>
                   </ion-row>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Real Leverage:</h3>
+                        <p>{{ realLeverage !== null ? realLeverage.toFixed(1) + 'x' : 'N/A' }}</p>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
                 </ion-grid>
               </ion-card-content>
             </ion-card>
@@ -235,6 +243,12 @@ const leverage = computed(() => {
   const entry = parseFloat(entryPrice.value) || 0;
   const distance = stopLossDistance.value;
   return distance > 0 ? entry / distance : null;
+});
+
+const realLeverage = computed(() => {
+  const maxLeverage = leverage.value;
+  const factor = parseFloat(securityFactor.value) || 1;
+  return maxLeverage !== null ? maxLeverage * factor : null;
 });
 
 // Methods
