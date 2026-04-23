@@ -68,6 +68,20 @@
                     </ion-chip>
                   </div>
 
+                  <!-- Security Factor -->
+                  <ion-item>
+                    <ion-label position="stacked">Security Factor (0.1 - 1)</ion-label>
+                    <ion-input
+                        v-model="securityFactor"
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        max="1"
+                        placeholder="1.0"
+                        @ionInput="calculatePositionSize"
+                    />
+                  </ion-item>
+
                   <!-- Entry Price -->
                   <ion-item>
                     <ion-label position="stacked">Entry Price ($)</ion-label>
@@ -112,7 +126,7 @@
                     </ion-col>
                     <ion-col size="6">
                       <ion-text>
-                        <h3>Position Size:</h3>
+                        <h3>Position Size $:</h3>
                         <p>${{ positionSize.toFixed(2) }}</p>
                       </ion-text>
                     </ion-col>
@@ -124,6 +138,14 @@
                         <p>${{ stopLossDistance.toFixed(2) }}</p>
                       </ion-text>
                     </ion-col>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Position Size (Shares/Contracts):</h3>
+                        <p>{{ positionSizeInShares !== null ? positionSizeInShares.toFixed(2) : 'N/A' }}</p>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
                     <ion-col size="6">
                       <ion-text>
                         <h3>Risk per Share:</h3>
@@ -166,6 +188,7 @@ import { ref, computed, watch } from 'vue';
 const isLong = ref(true);
 const accountSize = ref('');
 const riskPercentage = ref('');
+const securityFactor = ref('');
 const entryPrice = ref('');
 const stopLossPrice = ref('');
 
@@ -196,6 +219,12 @@ const positionSize = computed(() => {
   return entry > 0 ? risk * entry : null;
 });
 
+const positionSizeInShares = computed(() => {
+  const size = positionSize.value;
+  const entry = parseFloat(entryPrice.value) || 0;
+  return entry > 0 && size !== null ? size / entry : null;
+});
+
 // Methods
 const setRiskPercentage = (percentage: number) => {
   riskPercentage.value = percentage.toString();
@@ -208,7 +237,7 @@ const calculatePositionSize = () => {
 };
 
 // Watch for changes to recalculate
-watch([accountSize, riskPercentage, entryPrice, stopLossPrice, isLong], () => {
+watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice, isLong], () => {
   calculatePositionSize();
 });
 </script>
