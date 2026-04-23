@@ -101,7 +101,7 @@
                   <ion-item>
                     <ion-label position="stacked">Security Factor (0.1 - 1)</ion-label>
                     <ion-input
-                        v-model="securityFactor"
+                        v-model="settingsStore.positionSizeSecurityFactor"
                         type="number"
                         step="0.1"
                         min="0.1"
@@ -211,18 +211,20 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonButton,
   IonChip,
   IonGrid,
   IonRow,
   IonCol
 } from '@ionic/vue';
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import { useSettingsStore } from '@/stores/settings.store';
+
+// Initialize settings store
+const settingsStore = useSettingsStore();
 
 // Reactive data
 const accountSize = ref('');
 const riskPercentage = ref('');
-const securityFactor = ref('');
 const entryPrice = ref('');
 const stopLossPrice = ref('');
 
@@ -274,7 +276,7 @@ const leverage = computed(() => {
 
 const realLeverage = computed(() => {
   const maxLeverage = leverage.value;
-  const factor = parseFloat(securityFactor.value) || 1;
+  const factor = settingsStore.positionSizeSecurityFactor || 1;
   return maxLeverage !== null ? maxLeverage * factor : null;
 });
 
@@ -309,9 +311,15 @@ const calculatePositionSize = () => {
 };
 
 // Watch for changes to recalculate
-watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice], () => {
+watch([accountSize, riskPercentage, entryPrice, stopLossPrice], () => {
   calculatePositionSize();
 });
+
+// On component mount, initialize security factor from settings or default
+onMounted(async () => {
+  await settingsStore.loadSettings();
+});
+
 </script>
 
 <style scoped>
