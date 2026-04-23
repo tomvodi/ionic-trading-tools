@@ -5,131 +5,138 @@
         <h2>Position Size Calculator</h2>
       </ion-text>
 
-      <ion-card>
-        <ion-card-content>
-          <ion-list>
-            <!-- Direction Toggle -->
-            <ion-item>
-              <ion-label>Position Direction</ion-label>
-              <div class="direction-toggle" slot="end">
-                <ion-button
-                    :fill="isLong ? 'solid' : 'outline'"
-                    color="success"
-                    size="small"
-                    @click="isLong = true"
-                >
-                  Long
-                </ion-button>
-                <ion-button
-                    :fill="!isLong ? 'solid' : 'outline'"
-                    color="danger"
-                    size="small"
-                    @click="isLong = false"
-                >
-                  Short
-                </ion-button>
-              </div>
-            </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-lg="6">
+            <ion-card>
+              <ion-card-content>
+                <ion-list>
+                  <!-- Direction Toggle -->
+                  <ion-item>
+                    <ion-label>Position Direction</ion-label>
+                    <div class="direction-toggle" slot="end">
+                      <ion-button
+                          :fill="isLong ? 'solid' : 'outline'"
+                          color="success"
+                          size="small"
+                          @click="isLong = true"
+                      >
+                        Long
+                      </ion-button>
+                      <ion-button
+                          :fill="!isLong ? 'solid' : 'outline'"
+                          color="danger"
+                          size="small"
+                          @click="isLong = false"
+                      >
+                        Short
+                      </ion-button>
+                    </div>
+                  </ion-item>
 
-            <!-- Account Size -->
-            <ion-item>
-              <ion-label position="stacked">Account Size ($)</ion-label>
-              <ion-input
-                  v-model="accountSize"
-                  type="number"
-                  placeholder="10000"
-                  @ionInput="calculatePositionSize"
-              />
-            </ion-item>
+                  <!-- Account Size -->
+                  <ion-item>
+                    <ion-label position="stacked">Account Size ($)</ion-label>
+                    <ion-input
+                        v-model="accountSize"
+                        type="number"
+                        placeholder="10000"
+                        @ionInput="calculatePositionSize"
+                    />
+                  </ion-item>
 
-            <!-- Risk Percentage -->
-            <ion-item>
-              <ion-label position="stacked">Risk (%)</ion-label>
-              <ion-input
-                  v-model="riskPercentage"
-                  type="number"
-                  step="0.1"
-                  placeholder="0.5"
-                  @ionInput="calculatePositionSize"
-              />
-            </ion-item>
+                  <!-- Risk Percentage -->
+                  <ion-item>
+                    <ion-label position="stacked">Risk (%)</ion-label>
+                    <ion-input
+                        v-model="riskPercentage"
+                        type="number"
+                        step="0.1"
+                        placeholder="0.5"
+                        @ionInput="calculatePositionSize"
+                    />
+                  </ion-item>
 
-            <!-- Risk Percentage Chips -->
-            <div class="chips-container">
-              <ion-chip
-                  v-for="preset in riskPresets"
-                  :key="preset"
-                  @click="setRiskPercentage(preset)"
-              >
-                <ion-label>{{ preset }}%</ion-label>
-              </ion-chip>
-            </div>
+                  <!-- Risk Percentage Chips -->
+                  <div class="chips-container">
+                    <ion-chip
+                        v-for="preset in riskPresets"
+                        :key="preset"
+                        @click="setRiskPercentage(preset)"
+                    >
+                      <ion-label>{{ preset }}%</ion-label>
+                    </ion-chip>
+                  </div>
 
-            <!-- Entry Price -->
-            <ion-item>
-              <ion-label position="stacked">Entry Price ($)</ion-label>
-              <ion-input
-                  v-model="entryPrice"
-                  type="number"
-                  step="0.01"
-                  placeholder="100.00"
-                  @ionInput="calculatePositionSize"
-              />
-            </ion-item>
+                  <!-- Entry Price -->
+                  <ion-item>
+                    <ion-label position="stacked">Entry Price ($)</ion-label>
+                    <ion-input
+                        v-model="entryPrice"
+                        type="number"
+                        step="0.01"
+                        placeholder="100.00"
+                        @ionInput="calculatePositionSize"
+                    />
+                  </ion-item>
 
-            <!-- Stop Loss Price -->
-            <ion-item>
-              <ion-label position="stacked">Stop Loss Price ($)</ion-label>
-              <ion-input
-                  v-model="stopLossPrice"
-                  type="number"
-                  step="0.01"
-                  placeholder="95.00"
-                  @ionInput="calculatePositionSize"
-              />
-            </ion-item>
-          </ion-list>
+                  <!-- Stop Loss Price -->
+                  <ion-item>
+                    <ion-label position="stacked">Stop Loss Price ($)</ion-label>
+                    <ion-input
+                        v-model="stopLossPrice"
+                        type="number"
+                        step="0.01"
+                        placeholder="95.00"
+                        @ionInput="calculatePositionSize"
+                    />
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
 
-          <!-- Results -->
-          <ion-card v-if="positionSize !== null" class="ion-margin-top">
-            <ion-card-header>
-              <ion-card-title>Position Size Results</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="6">
-                    <ion-text>
-                      <h3>Risk Amount:</h3>
-                      <p>${{ riskAmount.toFixed(2) }}</p>
-                    </ion-text>
-                  </ion-col>
-                  <ion-col size="6">
-                    <ion-text>
-                      <h3>Position Size:</h3>
-                      <p>${{ positionSize.toFixed(2) }}</p>
-                    </ion-text>
-                  </ion-col>
-                </ion-row>
-                <ion-row v-if="stopLossDistance > 0">
-                  <ion-col size="6">
-                    <ion-text>
-                      <h3>Stop Loss Distance:</h3>
-                      <p>${{ stopLossDistance.toFixed(2) }}</p>
-                    </ion-text>
-                  </ion-col>
-                  <ion-col size="6">
-                    <ion-text>
-                      <h3>Risk per Share:</h3>
-                      <p>${{ riskPerShare.toFixed(4) }}</p>
-                    </ion-text>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-content>
-          </ion-card>
-        </ion-card-content>
-      </ion-card>
+          <ion-col size="12" size-lg="6" v-if="positionSize !== null">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Position Size Results</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Risk Amount:</h3>
+                        <p>${{ riskAmount.toFixed(2) }}</p>
+                      </ion-text>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Position Size:</h3>
+                        <p>${{ positionSize.toFixed(2) }}</p>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row v-if="stopLossDistance > 0">
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Stop Loss Distance:</h3>
+                        <p>${{ stopLossDistance.toFixed(2) }}</p>
+                      </ion-text>
+                    </ion-col>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3>Risk per Share:</h3>
+                        <p>${{ riskPerShare.toFixed(4) }}</p>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
@@ -207,21 +214,6 @@ watch([accountSize, riskPercentage, entryPrice, stopLossPrice, isLong], () => {
 </script>
 
 <style scoped>
-.risk-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 4px;
-  margin-top: 8px;
-}
-
-.risk-buttons ion-button {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 4px;
-  --padding-bottom: 4px;
-}
-
 .direction-toggle {
   display: flex;
   gap: 8px;
