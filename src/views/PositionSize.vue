@@ -11,29 +11,6 @@
             <ion-card>
               <ion-card-content>
                 <ion-list>
-                  <!-- Direction Toggle -->
-                  <ion-item>
-                    <ion-label>Position Direction</ion-label>
-                    <div class="direction-toggle" slot="end">
-                      <ion-button
-                          :fill="isLong ? 'solid' : 'outline'"
-                          color="success"
-                          size="small"
-                          @click="isLong = true"
-                      >
-                        Long
-                      </ion-button>
-                      <ion-button
-                          :fill="!isLong ? 'solid' : 'outline'"
-                          color="danger"
-                          size="small"
-                          @click="isLong = false"
-                      >
-                        Short
-                      </ion-button>
-                    </div>
-                  </ion-item>
-
                   <!-- Account Size -->
                   <ion-item>
                     <ion-label position="stacked">Account Size ($)</ion-label>
@@ -68,29 +45,44 @@
                     </ion-chip>
                   </div>
 
-                  <!-- Entry Price -->
-                  <ion-item>
-                    <ion-label position="stacked">Entry Price ($)</ion-label>
-                    <ion-input
-                        v-model="entryPrice"
-                        type="number"
-                        step="0.01"
-                        placeholder="100.00"
-                        @ionInput="calculatePositionSize"
-                    />
-                  </ion-item>
+                  <!-- Entry Price & Stop Loss with Direction Badge -->
+                  <div class="price-section">
+                    <div class="prices-container">
+                      <!-- Entry Price -->
+                      <ion-item>
+                        <ion-label position="stacked">Entry Price ($)</ion-label>
+                        <ion-input
+                            v-model="entryPrice"
+                            type="number"
+                            step="0.01"
+                            placeholder="100.00"
+                            @ionInput="calculatePositionSize"
+                        />
+                      </ion-item>
 
-                  <!-- Stop Loss Price -->
-                  <ion-item>
-                    <ion-label position="stacked">Stop Loss Price ($)</ion-label>
-                    <ion-input
-                        v-model="stopLossPrice"
-                        type="number"
-                        step="0.01"
-                        placeholder="95.00"
-                        @ionInput="calculatePositionSize"
-                    />
-                  </ion-item>
+                      <!-- Stop Loss Price -->
+                      <ion-item>
+                        <ion-label position="stacked">Stop Loss Price ($)</ion-label>
+                        <ion-input
+                            v-model="stopLossPrice"
+                            type="number"
+                            step="0.01"
+                            placeholder="95.00"
+                            @ionInput="calculatePositionSize"
+                        />
+                      </ion-item>
+                    </div>
+
+                    <!-- Position Direction Badge -->
+                    <div v-if="isLong !== null" class="direction-container">
+                      <ion-chip
+                          :color="isLong ? 'success' : 'danger'"
+                          class="direction-badge"
+                      >
+                        <ion-label>{{ isLong ? '🟢 LONG' : '🔴 SHORT' }}</ion-label>
+                      </ion-chip>
+                    </div>
+                  </div>
 
                   <!-- Security Factor -->
                   <ion-item>
@@ -215,7 +207,6 @@ import {
 import { ref, computed, watch } from 'vue';
 
 // Reactive data
-const isLong = ref(true);
 const accountSize = ref('');
 const riskPercentage = ref('');
 const securityFactor = ref('');
@@ -226,6 +217,13 @@ const stopLossPrice = ref('');
 const riskPresets = [0.2, 0.3, 0.5, 0.8, 1];
 
 // Computed values
+const isLong = computed(() => {
+  const entry = parseFloat(entryPrice.value) || 0;
+  const stop = parseFloat(stopLossPrice.value) || 0;
+  if (entry <= 0 || stop <= 0) return null;
+  return entry > stop; // true = long, false = short
+});
+
 const riskAmount = computed(() => {
   const account = parseFloat(accountSize.value) || 0;
   const risk = parseFloat(riskPercentage.value) || 0;
@@ -298,7 +296,7 @@ const calculatePositionSize = () => {
 };
 
 // Watch for changes to recalculate
-watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice, isLong], () => {
+watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice], () => {
   calculatePositionSize();
 });
 </script>
@@ -323,5 +321,34 @@ watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice, i
 .prominent-text {
   font-weight: bold;
   font-size: 1.2em;
+}
+
+.direction-item {
+  margin-top: 8px;
+}
+
+.direction-badge {
+  width: 100%;
+  text-align: center;
+}
+
+.price-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.prices-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.direction-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
 }
 </style>
