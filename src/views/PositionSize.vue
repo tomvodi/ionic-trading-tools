@@ -68,20 +68,6 @@
                     </ion-chip>
                   </div>
 
-                  <!-- Security Factor -->
-                  <ion-item>
-                    <ion-label position="stacked">Security Factor (0.1 - 1)</ion-label>
-                    <ion-input
-                        v-model="securityFactor"
-                        type="number"
-                        step="0.1"
-                        min="0.1"
-                        max="1"
-                        placeholder="1.0"
-                        @ionInput="calculatePositionSize"
-                    />
-                  </ion-item>
-
                   <!-- Entry Price -->
                   <ion-item>
                     <ion-label position="stacked">Entry Price ($)</ion-label>
@@ -102,6 +88,20 @@
                         type="number"
                         step="0.01"
                         placeholder="95.00"
+                        @ionInput="calculatePositionSize"
+                    />
+                  </ion-item>
+
+                  <!-- Security Factor -->
+                  <ion-item>
+                    <ion-label position="stacked">Security Factor (0.1 - 1)</ion-label>
+                    <ion-input
+                        v-model="securityFactor"
+                        type="number"
+                        step="0.1"
+                        min="0.1"
+                        max="1"
+                        placeholder="1.0"
                         @ionInput="calculatePositionSize"
                     />
                   </ion-item>
