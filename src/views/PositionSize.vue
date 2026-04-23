@@ -125,8 +125,8 @@
                   <ion-row>
                     <ion-col size="6">
                       <ion-text>
-                        <h3>Risk Amount:</h3>
-                        <p>${{ riskAmount.toFixed(2) }}</p>
+                        <h3>Position Size with Leverage:</h3>
+                        <p>${{ positionSizeWithLeverage !== null ? positionSizeWithLeverage.toFixed(2) : 'N/A' }}</p>
                       </ion-text>
                     </ion-col>
                     <ion-col size="6">
@@ -139,53 +139,49 @@
                   <ion-row v-if="stopLossDistance > 0">
                     <ion-col size="6">
                       <ion-text>
-                        <h3>Stop Loss Distance:</h3>
-                        <p>${{ stopLossDistance.toFixed(2) }}</p>
+                        <h3 class="prominent-text">Real Leverage:</h3>
+                        <p class="prominent-text">{{ realLeverage !== null ? realLeverage.toFixed(1) + 'x' : 'N/A' }}</p>
                       </ion-text>
                     </ion-col>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3 class="prominent-text">Liquidation Price:</h3>
+                        <p class="prominent-text">${{ liquidationPrice !== null ? liquidationPrice.toFixed(2) : 'N/A' }}</p>
+                      </ion-text>
+
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
                     <ion-col size="6">
                       <ion-text>
                         <h3>Position Size (Shares/Contracts):</h3>
                         <p>{{ positionSizeInShares !== null ? positionSizeInShares.toFixed(2) : 'N/A' }}</p>
                       </ion-text>
                     </ion-col>
-                  </ion-row>
-                  <ion-row>
                     <ion-col size="6">
                       <ion-text>
-                        <h3>Risk per Share:</h3>
-                        <p>${{ riskPerShare.toFixed(4) }}</p>
+                        <h3>Stop Loss Distance:</h3>
+                        <p>${{ stopLossDistance.toFixed(2) }}</p>
                       </ion-text>
                     </ion-col>
+                  </ion-row>
+                  <ion-row>
                     <ion-col size="6">
                       <ion-text>
                         <h3 class="light-text">Max. Leverage:</h3>
                         <p class="light-text">{{ leverage !== null ? leverage.toFixed(1) + 'x' : 'N/A' }}</p>
                       </ion-text>
                     </ion-col>
-                  </ion-row>
-                  <ion-row>
                     <ion-col size="6">
                       <ion-text>
-                        <h3 class="prominent-text">Real Leverage:</h3>
-                        <p class="prominent-text">{{ realLeverage !== null ? realLeverage.toFixed(1) + 'x' : 'N/A' }}</p>
+                        <h3 class="light-text">Risk per Share:</h3>
+                        <p class="light-text">${{ riskPerShare.toFixed(4) }}</p>
                       </ion-text>
                     </ion-col>
                   </ion-row>
                   <ion-row>
                     <ion-col size="6">
-                      <ion-text>
-                        <h3>Position Size with Leverage:</h3>
-                        <p>${{ positionSizeWithLeverage !== null ? positionSizeWithLeverage.toFixed(2) : 'N/A' }}</p>
-                      </ion-text>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row>
-                    <ion-col size="6">
-                      <ion-text>
-                        <h3>Liquidation Price:</h3>
-                        <p>${{ liquidationPrice !== null ? liquidationPrice.toFixed(2) : 'N/A' }}</p>
-                      </ion-text>
+
                     </ion-col>
                   </ion-row>
                 </ion-grid>
