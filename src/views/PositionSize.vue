@@ -152,6 +152,12 @@
                         <p>${{ riskPerShare.toFixed(4) }}</p>
                       </ion-text>
                     </ion-col>
+                    <ion-col size="6">
+                      <ion-text>
+                        <h3 class="light-text">Max. Leverage:</h3>
+                        <p class="light-text">{{ leverage !== null ? leverage.toFixed(1) + 'x' : 'N/A' }}</p>
+                      </ion-text>
+                    </ion-col>
                   </ion-row>
                 </ion-grid>
               </ion-card-content>
@@ -225,6 +231,12 @@ const positionSizeInShares = computed(() => {
   return entry > 0 && size !== null ? size / entry : null;
 });
 
+const leverage = computed(() => {
+  const entry = parseFloat(entryPrice.value) || 0;
+  const distance = stopLossDistance.value;
+  return distance > 0 ? entry / distance : null;
+});
+
 // Methods
 const setRiskPercentage = (percentage: number) => {
   riskPercentage.value = percentage.toString();
@@ -253,5 +265,9 @@ watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice, i
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
+}
+
+.light-text {
+  opacity: 0.6;
 }
 </style>
