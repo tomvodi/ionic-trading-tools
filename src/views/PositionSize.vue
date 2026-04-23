@@ -22,17 +22,30 @@
                     />
                   </ion-item>
 
-                  <!-- Risk Percentage -->
-                  <ion-item>
-                    <ion-label position="stacked">Risk (%)</ion-label>
-                    <ion-input
-                        v-model="riskPercentage"
-                        type="number"
-                        step="0.1"
-                        placeholder="0.5"
-                        @ionInput="calculatePositionSize"
-                    />
-                  </ion-item>
+                  <!-- Risk Percentage with Risk Amount Display -->
+                  <div class="risk-section">
+                    <div class="risk-input-container">
+                      <!-- Risk Percentage -->
+                      <ion-item>
+                        <ion-label position="stacked">Risk (%)</ion-label>
+                        <ion-input
+                            v-model="riskPercentage"
+                            type="number"
+                            step="0.1"
+                            placeholder="0.5"
+                            @ionInput="calculatePositionSize"
+                        />
+                      </ion-item>
+                    </div>
+
+                    <!-- Risk Amount Display -->
+                    <div class="risk-amount-container">
+                      <ion-text>
+                        <p class="risk-label">Risk Amount</p>
+                        <p class="risk-value">${{ riskAmount.toFixed(2) }}</p>
+                      </ion-text>
+                    </div>
+                  </div>
 
                   <!-- Risk Percentage Chips -->
                   <div class="chips-container">
@@ -350,5 +363,34 @@ watch([accountSize, riskPercentage, securityFactor, entryPrice, stopLossPrice], 
   align-items: center;
   justify-content: center;
   min-width: 80px;
+}
+
+.risk-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.risk-input-container {
+  flex: 1;
+}
+
+.risk-amount-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.risk-label {
+  font-size: 0.9em;
+  color: var(--ion-color-medium);
+  margin: 0;
+}
+
+.risk-value {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0;
 }
 </style>
