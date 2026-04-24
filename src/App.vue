@@ -21,6 +21,11 @@
               <ion-label>Position Size</ion-label>
             </ion-item>
 
+            <ion-item router-link="/converter" router-direction="root" detail>
+              <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
+              <ion-label>Converter</ion-label>
+            </ion-item>
+
             <ion-item router-link="/accounts" router-direction="root" detail>
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-label>Accounts</ion-label>
@@ -113,6 +118,7 @@ watch(route, (newRoute) => {
   const titles: Record<string, string> = {
     '/home': 'Home',
     '/position-size': 'Position Size',
+    '/converter': 'Converter',
     '/accounts': 'Accounts',
     '/companies': 'Companies',
     '/settings': 'Settings',

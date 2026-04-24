@@ -15,6 +15,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/PositionSize.vue')
   },
   {
+    path: '/converter',
+    component: () => import('../views/Converter.vue')
+  },
+  {
     path: '/accounts',
     component: () => import('../views/Accounts.vue')
   },
