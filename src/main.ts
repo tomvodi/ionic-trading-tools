@@ -26,7 +26,7 @@ import {
   informationCircleOutline,
   settingsOutline,
   searchOutline, pencilOutline, trashOutline, storefrontOutline, personOutline, calculatorOutline,
-  swapHorizontalOutline
+  swapHorizontalOutline, cloudUploadOutline,
 } from 'ionicons/icons';
 
 // Register the icons you want to use
@@ -41,6 +41,7 @@ addIcons({
   'person-outline': personOutline,
   'calculator-outline': calculatorOutline,
   'swap-horizontal-outline': swapHorizontalOutline,
+  'cloud-upload-outline': cloudUploadOutline,
 });
 /**
  * Ionic Dark Mode
